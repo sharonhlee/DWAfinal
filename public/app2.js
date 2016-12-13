@@ -5,7 +5,8 @@ jQuery(function($){
     var IO = {
 
         init: function() {
-            IO.socket = io.connect();
+            console.log("app2 in the house");
+            IO.socket = io();
             IO.bindEvents();
         },
 
@@ -21,9 +22,10 @@ jQuery(function($){
         },
 
         //client just connected
-        onConnected : function() {
-            // copy sesson ID
-            App.mySocketId = IO.socket.socket.session.id;
+        onConnected : function(data) {
+            console.log("copy sesson ID");
+            App.mySocketId = data;
+            console.log(App.mySocketId)
         },
 
         //game ID generated, gameinit
@@ -107,8 +109,8 @@ jQuery(function($){
 
         bindEvents: function () {
             // Host
-            App.$doc.on('click', '#btnCreatePri', App.Host.onCreateClickPri);
-            App.$doc.on('click', '#btnCreatePub', App.Host.onCreateClickPubß);
+            App.$doc.on('click', '#btnCreatePri', App.Host.onCreateClickPri );
+            App.$doc.on('click', '#btnCreatePub', App.Host.onCreateClickPub );
 
             // Player
             App.$doc.on('click', '#btnJoinGame', App.Player.onJoinClick);
@@ -121,7 +123,6 @@ jQuery(function($){
         //starter screen
         showInitScreen: function() {
             App.$gameArea.html(App.$templateIntroScreen);
-            App.doTextFit('.title');
         },
 
 
@@ -138,30 +139,46 @@ jQuery(function($){
 
             //start button clicked
             onCreateClickPub: function () {
-                IO.emit('hostCreateNewPubGame');
+                console.log('pub');
+                IO.socket.emit('hostCreateNewPubGame');
             },
-            onCreateClickPri: function () {    
-                IO.emit('hostCreateNewPriGame');   
+            onCreateClickPri: function () {  
+                console.log("pri");  
+                IO.socket.emit('hostCreateNewPriGame');   
             },
 
             //host init waiting screen
             gameInit: function (data) {
+                if (data.publish===true){
+                    $.ajax({
+                        type: "POST",
+                        url: "/twoplayer/openrooms",
+                        data: {
+                            "gameid": JSON.stringify(data.gameId)
+                        },
+                        success: function(data) {
+                        //show content
+                        console.log('Room open to public players')
+                        },
+                        error: function(err) {
+                        //show error message
+                        console.log("Error, room was not published");
+                        }
+                    });
+                }
                 App.gameId = data.gameId;
                 App.mySocketId = data.mySocketId;
                 App.myRole = 'Host';
                 App.Host.numPlayersInRoom = 0;
+                console.log(App.gameId,App.mySocketId)
 
-                App.Host.displayNewGameScreen();
+                App.Host.displayNewGameScreen({p:data.publish});
             },
 
             //waiting screen for host
-            displayNewGameScreen : function() {
+            displayNewGameScreen : function(data) {
                 // Fill the game screen with the appropriate HTML
                 App.$gameArea.html(App.$templateNewGame);
-
-                // Display the URL on screen
-                $('#gameURL').text(window.location.href);////MIGHT NEED TO REVISE
-                App.doTextFit('#gameURL');
 
                 // show the room id on screen
                 $('#spanNewGameCode').text(App.gameId);
@@ -344,7 +361,7 @@ jQuery(function($){
                 };
 
                 // Send the gameId and playerName to the server
-                IO.emit('playerJoinGame', data);
+                IO.socket.emit('playerJoinGame', data);
 
                 // Set the appropriate properties for the current player.
                 App.myRole = 'Player';
@@ -367,7 +384,7 @@ jQuery(function($){
                     answer: answer,
                     round: App.currentRound
                 }
-                IO.emit('playerAnswer',data);
+                IO.socket.emit('playerAnswer',data);
             },
 
             /**
@@ -379,7 +396,7 @@ jQuery(function($){
                     gameId : App.gameId,
                     playerName : App.Player.myName
                 }
-                IO.emit('playerRestart',data);
+                IO.socket.emit('playerRestart',data);
                 App.currentRound = 0;
                 $('#gameArea').html("<h3>Waiting on host to start new game.</h3>");
             },

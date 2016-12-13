@@ -7,11 +7,11 @@ exports.initGame = function(sio, socket){
     console.log("initgame");
     io = sio;
     gameSocket = socket;
-    gameSocket.emit('connected', { message: "You are connected!" });
+    gameSocket.emit('connected', socket.id);
 
     // Host Events
-    gameSocket.on('hostCreateNewPubGame', hostCreateNewPubGame);
-    gameSocket.on('hostCreateNewPriGame', hostCreateNewPriGame);
+    gameSocket.on('hostCreateNewPubGame', onhostCreateNewPubGame);
+    gameSocket.on('hostCreateNewPriGame', onhostCreateNewPriGame);
     gameSocket.on('hostRoomFull', hostPrepareGame);
     gameSocket.on('hostCountdownFinished', hostStartGame);
     gameSocket.on('hostNextRound', hostNextRound);
@@ -31,40 +31,30 @@ exports.initGame = function(sio, socket){
 /**
  * The 'START' button was clicked and 'hostCreateNewGame' event occurred.
  */
-function hostCreateNewPubGame() {
-    console.loh("yo");
-    // create a unique Socket.IO Room
+function onhostCreateNewPubGame() {
+    // open to strangers
     var gameroom = ( Math.random() * 100000 ) | 0;
+    console.log(gameroom);
+    console.log(this.id);
 
     // Return the Room ID (gameId) and the socket ID (mySocketId) to the browser client
-    this.emit('newGameCreated', {gameId: gameroom, mySocketId: this.id});
-    var newroom = new Openroom({
-        gameId: $gameroom.val()
-    });
-    $.ajax({
-        type: 'POST',
-        url:'/',
-        data: newroom,
-        success: function(){
-            console.log("room added to public pool")
-        }
-    })
-    console.log(newroom);
+    this.emit('newGameCreated', {gameId: gameroom, mySocketId: this.id, publish: true});  
 
-    // Join the Room and wait for the players
+    // join the Room and wait for the players
     this.join(gameroom.toString());
 };
 
-
-function hostCreateNewPriGame() {
-    // Create a unique Socket.IO Room
-    var thisGameId = ( Math.random() * 100000 ) | 0;
+function onhostCreateNewPriGame() {
+    //game room to not be publicized, and instead encouraged to share on players own
+    var gameroom = ( Math.random() * 100000 ) | 0;
+    console.log(gameroom);
+    console.log(this.id);
 
     // Return the Room ID (gameId) and the socket ID (mySocketId) to the browser client
-    this.emit('newGameCreated', {gameId: thisGameId, mySocketId: this.id});
+    this.emit('newGameCreated', {gameId: gameroom, mySocketId: this.id, publish: false});
 
-    // Join the Room and wait for the players
-    this.join(thisGameId.toString());
+    // join the Room and wait for the players
+    this.join(gameroom.toString());
 };
 
 //lets host know two players are now present
