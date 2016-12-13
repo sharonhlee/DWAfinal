@@ -41,7 +41,7 @@ function handleSubmit(event) {
         'q': $('#searchterms input').serializeArray(),
         'begin_date': $('#year').val() + "0101",
         'end_date': $('#year').val() + "1231",
-        'api_key': '28e65b2092ce45208a669293b9e14601'
+        'api_key': '8848ab06ce4d4f1b9a89934c309a4057'
     };
     //console.log(formData);
     //console.log(formData.q.length);
@@ -68,7 +68,6 @@ function handleSubmit(event) {
                 url: 'http://api.nytimes.com/svc/search/v2/articlesearch.json',
                 method: 'GET',
                 data: info,
-                dataType: 'jsonp',
                 searchkey: info.q
             }).done(function(data) {
                 num = data.response.meta.hits; //number of articles

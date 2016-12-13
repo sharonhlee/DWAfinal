@@ -1,4 +1,4 @@
-
+var cors = require('cors');//cross origins middleware
 var express = require('express');
 var hbs = require('express-handlebars');
 var bodyParser = require('body-parser');
@@ -8,6 +8,8 @@ var newsgame = require('./newsgame.js');
 
 var app = express();
 var http = require('http').Server(app);
+
+app.use(cors({credentials: true, origin: true}));
 
 require('dotenv').config();
 
@@ -56,4 +58,3 @@ app.use('/twoplayer', twoplayer);
 http.listen(3000, function() {
   console.log('listening on *:3000');
 });
-

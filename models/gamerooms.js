@@ -7,9 +7,8 @@ var publicroomSchema = new Schema({
     dateCreated: {type: Date, default: Date.now}
 });
 
-publicroomSchema.plugin(URLSlugs('name', {field: 'slug'}));
 
 var Openroom = mongoose.model('Openroom', publicroomSchema);
 
-// when we require this file, we get Pet model
+
 module.exports = Openroom;
