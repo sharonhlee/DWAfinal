@@ -1,0 +1,44 @@
+
+
+    <div class="stage" id="pregameform">
+
+        <form action="/games" method="get">
+            <label for "name">
+            <label for="year">Year(1831 to current year): </label><br>
+            <input id="year" type="number" name="year" min="1831" max="2016" value=2016 /><br><br>
+
+            <label for="searchterm">Search: </label><br>
+            <div id="searchterms">
+            <input type="text" class= "st" name="searchterm1" placeholder="Enter Search term"/><br>
+            <input type="text" class= "st" name="searchterm2" placeholder="Enter Search term"/><br>
+            <input type="text" class= "st" name="searchterm3" placeholder="Enter Search term"/><br>
+            <input type="text" class= "st" name="searchterm4" placeholder="Enter Search term"/><br>
+            <input type="text" class= "st" name="searchterm5" placeholder="Enter Search term"/>
+
+            </div>
+            <h3><a href="#" id="addmore">Add Another Input Box</a></h3>
+
+            <input type="hidden" name="mode" value="html">
+            <br>
+            <input type="submit" />
+
+        </form>
+
+    </div> <!--end of pregame page-->
+
+
+    <div class="stage hide" id="gamestart">
+        <h3 id="answer"></h3>
+        <h3 id="scorekeeper"></h3>
+    </div> <!--end of main game page-->
+
+
+    <div class="stage hide" id="gameover">
+        <h1>GAME OVER</h1>
+        <p id="end message"></p>
+        <a id= "playagain" href="/" class="button">Play again?</a>
+    </div> <!--end of gameover page-->
+
+
+<script src="app1.js"></script>
+

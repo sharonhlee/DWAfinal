@@ -1,0 +1,137 @@
+
+*{
+	font-family: 'Merriweather', serif;
+	color:rgb(48,92,135);
+	background-color:rgb(252,177,32);
+	font-size:30px;
+}
+
+body{
+	align-content: center;
+	text-align: center;
+	margin:50px 0 50px 0;
+	padding:auto;
+}
+
+label{
+	font-size:40px;
+}
+
+input:focus{
+	text-align:center;
+	outline:none;
+	color:rgba(48,92,135,.8);
+}
+
+input[type=submit]{
+	font-size:34px;
+	background-color:none;
+	border:3px solid rgba(48,92,135,.8);
+	color:rgba(48,92,135,.8);
+	border-radius:10px;
+	cursor: pointer;
+}
+input[type=submit]:hover{
+	background-color:rgba(48,92,135,.8);
+	color:rgb(252,177,32);
+	transform:scale(.9);
+	-webkit-transition: all .5s ease;
+  	-moz-transition: all .5s ease;
+  	-o-transition: all .5s ease;
+  	-ms-transition: all .5s ease;
+  	transition: all .5s ease;
+}
+input[type=text]{
+	border:none;
+}
+
+input[type=number]{
+	border:none;
+	text-align:center;
+}
+input{
+	text-align:center;
+}
+
+::-webkit-input-placeholder {
+   color: rgb(232,154,0);
+   text-align: center;
+}
+:-moz-placeholder { /* Firefox 18- */
+   color: rgb(232,154,0); 
+   text-align: center;
+}
+::-moz-placeholder {  /* Firefox 19+ */
+   color: rgb(232,154,0); 
+   text-align: center;
+}
+:-ms-input-placeholder {  
+   color: rgb(232,154,0);  
+   text-align: center;
+}
+
+div{
+	text-align:center;
+}
+
+#choice1display:hover{
+	background-color: rgb(227,159,29);
+}
+
+#choice2display:hover{
+	background-color: rgb(227,159,29);
+}
+
+a{
+	text-decoration: none;
+}
+
+a.button {
+
+    font-size:50px;
+    padding: 5px 15px 5px 15px;
+	background-color:none;
+	border:3px solid rgba(48,92,135,.8);
+	color:rgba(48,92,135,.8);
+	border-radius:15px;
+	cursor: pointer;
+}
+
+a.button:hover{
+	background-color:rgba(48,92,135,.8);
+	color:rgb(252,177,32);
+	transform:scale(.9);
+	-webkit-transition: all .5s ease;
+  	-moz-transition: all .5s ease;
+  	-o-transition: all .5s ease;
+  	-ms-transition: all .5s ease;
+  	transition: all .5s ease;
+}
+
+#instruction{
+	font-size:18px;
+}
+#starter_page{
+	align-content: center;
+	text-align: center;
+	margin:120px;
+	padding:auto;
+}
+.hide{
+	display: none;
+}
+
+#scorekeeper{
+	position:absolute;
+	right:60px;
+	top:50%;
+	font-size:50px;
+	background-color:none;
+}
+
+#answer{
+	position: fixed;
+	top:50%;
+	left:50%;
+	transform: translate(-50%,-50%);
+}
