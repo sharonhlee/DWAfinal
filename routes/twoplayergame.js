@@ -33,7 +33,7 @@ router.post('/openrooms', function(req, res, next){
 });
 
 router.get('/openrooms', function(req, res, next) {
-  Search.find({}, function(err, data) {
+  Openroom.find({}, function(err, data) {
     if (err) {
       res.status(500);
       return res.json({

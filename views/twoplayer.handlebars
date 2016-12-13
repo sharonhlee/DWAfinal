@@ -10,7 +10,8 @@
             <div class="buttons">
 
                 <h1>Play our game with a friend or a stranger!</h1>
-                <p>Either Create a private/public room yourself or join an open game room. Warm up those clicking muscles :)</p>
+                <p id='small-instruct'>Either Create a private/public room yourself or join an open game room</p>
+                <p id='small-instruct'>Warm up those clicking muscles :)</p>
                 <button id='btnCreatePri'>Create (Private)</button>
                 <br><br>
                 <button id='btnCreatePub'>Create (Public)</button>
@@ -37,7 +38,7 @@
 
     <script id="join-game-choice-template" type="text/template">
         <h2>Are you joining a private or a public game?</h1> 
-        <p>(You will need a game room ID if you're playing private!)"</p>
+        <p id='small-instruct'>(You will need a game room ID if you're playing private!)"</p>
         <button id='btnJoinPri'>Private</button>
         <button id='btnJoinPub'>Public</button>
     </script>
@@ -70,7 +71,7 @@
             </div>
             <br>
             <div class="info">
-                <input id="inputGameId" type="hidden" value="public"/>
+                <input id="inputGameId" type="hidden" value="0"/>
             </div>
             <br>
             <div class="info buttons">

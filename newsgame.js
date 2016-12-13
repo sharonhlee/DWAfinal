@@ -20,6 +20,7 @@ exports.initGame = function(sio, socket){
     gameSocket.on('playerJoinGame', playerJoinGame);
     gameSocket.on('playerAnswer', playerAnswer);
     gameSocket.on('playerRestart', playerRestart);
+    gameSocket.on('joinpublicgame',joinPublicGame);
 }
 
 //HOST
@@ -88,7 +89,6 @@ function hostNextRound(data) {
 //BELOW
 
 function playerJoinGame(data) {
-    //console.log('Player ' + data.playerName + 'attempting to join game: ' + data.gameId );
 
     // A reference to the player's Socket.IO socket object
     var sock = this;
@@ -97,9 +97,9 @@ function playerJoinGame(data) {
 
     var room = gameSocket.adapter.rooms[data.gameId];
     console.log(room);
-
+    console.log(sock.id)
     // If the room exists...
-    if( room != undefined ){
+    if( room != undefined && data.gameId!=0){
         // attach the socket id to the data object.
         data.mySocketId = sock.id;
         console.log(data.mySocketId)
@@ -107,24 +107,31 @@ function playerJoinGame(data) {
         console.log('player joining private room');
         sock.join(data.gameId);
 
-        // Emit an event notifying the clients that the player has joined the room.
         io.sockets.in(data.gameId).emit('playerJoinedRoom', data);
 
-    } else if(room=="public"){
-        data.mySocketId = sock.id;
-        console.log(data.mySocketId)
+    } else if(data.gameId==0){
 
-        //console.log('player joining public room');
-        //sock.join(data.gameId);
-
-        // Emit an event notifying the clients that the player has joined the room.
-        //io.sockets.in(data.gameId).emit('playerJoinedRoom', data);
+        console.log('player joining public room');
+        this.emit('findRooms');
 
     }else {
-        // Otherwise, send an error message back to the player.
-        this.emit('invalidId');
+
+        this.emit('invalidId',{message: "That room does not exist."});
     }
-}
+};
+
+function joinPublicGame(data){
+    var sock = this;
+
+    data.mySocketId = sock.id;
+    console.log(data.mySocketId)
+
+    console.log('player joining public room');
+    sock.join(data);
+
+    io.sockets.in(data).emit('playerJoinedRoom', data);
+};
+
 
 /**
  * A player has tapped a word in the word list.
@@ -136,7 +143,7 @@ function playerAnswer(data) {
     // The player's answer is attached to the data object.  \
     // Emit an event with the answer so it can be checked by the 'Host'
     io.sockets.in(data.gameId).emit('hostCheckAnswer', data);
-}
+};
 
 /**
  * The game is over, and a player has clicked a button to restart the game.

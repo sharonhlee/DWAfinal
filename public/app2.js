@@ -19,6 +19,18 @@ jQuery(function($){
             IO.socket.on('hostCheckAnswer', IO.hostCheckAnswer);
             IO.socket.on('gameOver', IO.gameOver);
             IO.socket.on('invalidId', IO.invalidId );
+            IO.socket.on('findRooms', IO.openRooms );
+        },
+
+        //finding open rooms from mongo db
+        openRooms : function(){
+            $.ajax({
+            url: 'twoplayer/openrooms',
+            method: 'GET',
+            }).done(function(data) {
+            var gameId=data[Math.floor(Math.random()*5)].gameId;
+            IO.socket.emit('joinpublicgame',gameId)
+            })   
         },
 
         //client just connected
@@ -69,7 +81,7 @@ jQuery(function($){
         },
 
         invalidId : function(data) {
-            console.log(data);
+            alert(data.message);
         }
 
     };
@@ -208,7 +220,7 @@ jQuery(function($){
                 // If two players have joined, start the game!
                 if (App.Host.numPlayersInRoom === 2) {
                     //alert server room's full
-                    IO.emit('hostRoomFull',App.gameId);
+                    IO.socket.emit('hostRoomFull',App.gameId);
                 }
             },
 
@@ -222,7 +234,7 @@ jQuery(function($){
                 // on-screen countdown timer
                 var $secondsLeft = $('#hostWord');
                 App.countDown( $secondsLeft, 5, function(){
-                    IO.emit('hostCountdownFinished', App.gameId);
+                    IO.socket.emit('hostCountdownFinished', App.gameId);
                 });
 
                 // Display the players' names on screen
@@ -273,7 +285,7 @@ jQuery(function($){
                         }
 
                         // Notify the server to start the next round.
-                        IO.emit('hostNextRound',data);
+                        IO.socket.emit('hostNextRound',data);
 
                     } else {
                         // A wrong answer was submitted, so decrement the player's score.
@@ -349,11 +361,13 @@ jQuery(function($){
                 App.$gameArea.html(App.$templateJoinchoice);
             },
 
-            onJoinClickPub: function(){
+            onPubJoinClick: function(){
+                console.log("asked to join pub game");
                 App.$gameArea.html(App.$templateJoinPubGame);
             },
 
-            onJoinClickPri: function(){
+            onPriJoinClick: function(){
+                console.log("asked to join private game");
                 App.$gameArea.html(App.$templateJoinPriGame);
             },
 
@@ -366,7 +380,7 @@ jQuery(function($){
 
                 // collect data to send to the server
                 var data = {
-                    gameId : +($('#inputGameId').val()),
+                    gameId : Number($('#inputGameId').val()),
                     playerName : $('#inputPlayerName').val() || 'anon'
                 };
                 console.log(data);
@@ -538,6 +552,8 @@ jQuery(function($){
                 }
             );
         }
+
+
 
     };
 
