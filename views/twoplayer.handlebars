@@ -7,16 +7,15 @@
 
         <div class="titleWrapper">
 
-            <div class="title">
-                KNOW YOUR NEWS?
-            </div>
-
             <div class="buttons">
 
-                <!-- <button id="btnCreateGame" class="btn left" onclick="createoption()">CREATE</button> -->
-                <button id='btnCreatePri'>Private</button>
-                <button id='btnCreatePub'>Public</button>
-                <button id="btnJoinGame" class="btn right">JOIN</button>
+                <h1>Play our game with a friend or a stranger!</h1>
+                <p>Either Create a private/public room yourself or join an open game room. Warm up those clicking muscles :)</p>
+                <button id='btnCreatePri'>Create (Private)</button>
+                <br><br>
+                <button id='btnCreatePub'>Create (Public)</button>
+                <br><br>
+                <button id="btnJoinGame" class="btn right">Join</button>
                 <div style="clear:both"></div>
             </div>
 
@@ -36,25 +35,51 @@
         </div>
     </script>
 
+    <script id="join-game-choice-template" type="text/template">
+        <h2>Are you joining a private or a public game?</h1> 
+        <p>(You will need a game room ID if you're playing private!)"</p>
+        <button id='btnJoinPri'>Private</button>
+        <button id='btnJoinPub'>Public</button>
+    </script>
+
     <!-- This scrreen appears when a player clicks "JOIN" on the Title Screen -->
-    <script id="join-game-template" type="text/template">
+    <script id="join-game-private-template" type="text/template">
         <div class="joinGameWrapper">
             <div class="info">
                 <label for="inputPlayerName">Your Name:</label>
                 <input id="inputPlayerName" type="text" />
             </div>
-
+            <br>
             <div class="info">
                 <label for="inputGameId">Game ID:</label>
                 <input id="inputGameId" type="text"/>
             </div>
-
+            <br>
             <div class="info buttons">
-                <button id="btnStart" class="btn">Start</button>
+                <button id="btnStart" class="btn">Enter Game</button>
                 <div id="playerWaitingMessage"></div>
             </div>
         </div>
     </script>
+
+    <script id="join-game-public-template" type="text/template">
+        <div class="joinGameWrapper">
+            <div class="info">
+                <label for="inputPlayerName">Your Name:</label>
+                <input id="inputPlayerName" type="text" />
+            </div>
+            <br>
+            <div class="info">
+                <input id="inputGameId" type="hidden" value="public"/>
+            </div>
+            <br>
+            <div class="info buttons">
+                <button id="btnStart" class="btn">Enter Game</button>
+                <div id="playerWaitingMessage"></div>
+            </div>
+        </div>
+    </script>
+
 
     <!-- This is the 'Host' screen. It displays the word for each player to match -->
     <script id="host-game-template" type="text/template">

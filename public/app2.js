@@ -18,7 +18,7 @@ jQuery(function($){
             IO.socket.on('newWordData', IO.onNewWordData);
             IO.socket.on('hostCheckAnswer', IO.hostCheckAnswer);
             IO.socket.on('gameOver', IO.gameOver);
-            IO.socket.on('error', IO.error );
+            IO.socket.on('invalidId', IO.invalidId );
         },
 
         //client just connected
@@ -68,8 +68,8 @@ jQuery(function($){
             App[App.myRole].endGame(data);
         },
 
-        error : function(data) {
-            alert(data.message);
+        invalidId : function(data) {
+            console.log(data);
         }
 
     };
@@ -101,8 +101,10 @@ jQuery(function($){
             App.$gameArea = $('#gameArea');
             App.$templateIntroScreen = $('#intro-screen-template').html();
             App.$templateNewGame = $('#create-game-template').html();
-            App.$templateJoinGame = $('#join-game-template').html();
+            App.$templateJoinPriGame = $('#join-game-private-template').html();
+            App.$templateJoinPubGame = $('#join-game-public-template').html();
             App.$hostGame = $('#host-game-template').html();
+            App.$templateJoinchoice= $('#join-game-choice-template').html();
         },
 
         //click handlers for the various buttons
@@ -114,6 +116,8 @@ jQuery(function($){
 
             // Player
             App.$doc.on('click', '#btnJoinGame', App.Player.onJoinClick);
+            App.$doc.on('click', '#btnJoinPub', App.Player.onPubJoinClick);
+            App.$doc.on('click', '#btnJoinPri', App.Player.onPriJoinClick);
             App.$doc.on('click', '#btnStart',App.Player.onPlayerStartClick);
             App.$doc.on('click', '.btnAnswer',App.Player.onPlayerAnswerClick);
             App.$doc.on('click', '#btnPlayerRestart', App.Player.onPlayerRestart);
@@ -337,14 +341,20 @@ jQuery(function($){
              */
             myName: '',
 
-            /**
-             * Click handler for the 'JOIN' button
-             */
+            //click handler for when someone clicks to join 
             onJoinClick: function () {
-                // console.log('Clicked "Join A Game"');
+                console.log('someones trying to join, giving options...');
 
                 // Display the Join Game HTML on the player's screen.
-                App.$gameArea.html(App.$templateJoinGame);
+                App.$gameArea.html(App.$templateJoinchoice);
+            },
+
+            onJoinClickPub: function(){
+                App.$gameArea.html(App.$templateJoinPubGame);
+            },
+
+            onJoinClickPri: function(){
+                App.$gameArea.html(App.$templateJoinPriGame);
             },
 
             /**
@@ -352,13 +362,14 @@ jQuery(function($){
              * and clicked Start.
              */
             onPlayerStartClick: function() {
-                // console.log('Player clicked "Start"');
+                console.log('player is trying to start');
 
                 // collect data to send to the server
                 var data = {
                     gameId : +($('#inputGameId').val()),
                     playerName : $('#inputPlayerName').val() || 'anon'
                 };
+                console.log(data);
 
                 // Send the gameId and playerName to the server
                 IO.socket.emit('playerJoinGame', data);

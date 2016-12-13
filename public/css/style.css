@@ -135,3 +135,21 @@ a.button:hover{
 	left:50%;
 	transform: translate(-50%,-50%);
 }
+
+#small-instruct{
+	font-size: 20px;
+}
+
+.info{
+	align-content: center;
+	text-align: center;
+}
+#inputPlayerName{
+	height:40px;
+	width:200px;
+}
+
+#inputGameId{
+	height:40px;
+	width:200px;
+}

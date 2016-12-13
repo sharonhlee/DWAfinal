@@ -22,15 +22,11 @@ exports.initGame = function(sio, socket){
     gameSocket.on('playerRestart', playerRestart);
 }
 
-/* *******************************
-   *                             *
-   *       HOST FUNCTIONS        *
-   *                             *
-   ******************************* */
+//HOST
+//FUNCTIONS
+//BELOW
 
-/**
- * The 'START' button was clicked and 'hostCreateNewGame' event occurred.
- */
+//host is creating either a public or a private room
 function onhostCreateNewPubGame() {
     // open to strangers
     var gameroom = ( Math.random() * 100000 ) | 0;
@@ -86,18 +82,11 @@ function hostNextRound(data) {
         sendWord(data.round, data.gameId);
     }
 }
-/* *****************************
-   *                           *
-   *     PLAYER FUNCTIONS      *
-   *                           *
-   ***************************** */
 
-/**
- * A player clicked the 'START GAME' button.
- * Attempt to connect them to the room that matches
- * the gameId entered by the player.
- * @param data Contains data entered via player's input - playerName and gameId.
- */
+//PLAYER 
+//FUNCTIONS
+//BELOW
+
 function playerJoinGame(data) {
     //console.log('Player ' + data.playerName + 'attempting to join game: ' + data.gameId );
 
@@ -105,24 +94,35 @@ function playerJoinGame(data) {
     var sock = this;
 
     // Look up the room ID in the Socket.IO manager object.
-    var room = gameSocket.manager.rooms["/" + data.gameId];
+
+    var room = gameSocket.adapter.rooms[data.gameId];
+    console.log(room);
 
     // If the room exists...
     if( room != undefined ){
         // attach the socket id to the data object.
         data.mySocketId = sock.id;
+        console.log(data.mySocketId)
 
-        // Join the room
+        console.log('player joining private room');
         sock.join(data.gameId);
-
-        //console.log('Player ' + data.playerName + ' joining game: ' + data.gameId );
 
         // Emit an event notifying the clients that the player has joined the room.
         io.sockets.in(data.gameId).emit('playerJoinedRoom', data);
 
-    } else {
+    } else if(room=="public"){
+        data.mySocketId = sock.id;
+        console.log(data.mySocketId)
+
+        //console.log('player joining public room');
+        //sock.join(data.gameId);
+
+        // Emit an event notifying the clients that the player has joined the room.
+        //io.sockets.in(data.gameId).emit('playerJoinedRoom', data);
+
+    }else {
         // Otherwise, send an error message back to the player.
-        this.emit('error',{message: "This room does not exist."} );
+        this.emit('invalidId');
     }
 }
 
