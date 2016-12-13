@@ -25,11 +25,17 @@ jQuery(function($){
         //finding open rooms from mongo db
         openRooms : function(){
             $.ajax({
-            url: 'twoplayer/openrooms',
-            method: 'GET',
+                url: 'twoplayer/openrooms',
+                method: 'GET',
             }).done(function(data) {
-            var gameId=data[Math.floor(Math.random()*5)].gameId;
-            IO.socket.emit('joinpublicgame',gameId)
+                if(data.length==0){
+                    alert("There are currently no public rooms open. Go back to create one!")
+                }else{
+                var d={gameId: data[Math.floor(Math.random()*data.length)].gameId,
+                    playerName : $('#inputPlayerName').val() || 'anon'
+                }
+                IO.socket.emit('joinpublicgame',d);
+                }
             })   
         },
 
@@ -185,7 +191,7 @@ jQuery(function($){
                 App.gameId = data.gameId;
                 App.mySocketId = data.mySocketId;
                 App.myRole = 'Host';
-                App.Host.numPlayersInRoom = 0;
+                App.Host.numPlayersInRoom = 1;
                 console.log(App.gameId,App.mySocketId)
 
                 App.Host.displayNewGameScreen({p:data.publish});
@@ -220,6 +226,7 @@ jQuery(function($){
                 // If two players have joined, start the game!
                 if (App.Host.numPlayersInRoom === 2) {
                     //alert server room's full
+                    console.log("2 people in here now");
                     IO.socket.emit('hostRoomFull',App.gameId);
                 }
             },

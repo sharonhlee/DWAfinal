@@ -127,9 +127,9 @@ function joinPublicGame(data){
     console.log(data.mySocketId)
 
     console.log('player joining public room');
-    sock.join(data);
+    sock.join(data.gameId);
 
-    io.sockets.in(data).emit('playerJoinedRoom', data);
+    io.sockets.in(data.gameId).emit('playerJoinedRoom', data);
 };
 
 
